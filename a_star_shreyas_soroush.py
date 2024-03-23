@@ -164,52 +164,52 @@ def heuristic(current_node, goal_node):
 def Check_goal(present, goal):
     return present.x == goal.x and present.y == goal.y
 # Actions and cost calculation
-def UP_60(x, y, theta, step_size, cost):
+def UP_60(x, y, theta, robot_step_size, cost):
     theta = theta + 60
-    x = x + (step_size * np.cos(np.radians(theta)))
-    y = y + (step_size * np.sin(np.radians(theta)))
+    x = x + (robot_step_size * np.cos(np.radians(theta)))
+    y = y + (robot_step_size * np.sin(np.radians(theta)))
     x = round(x)
     y = round(y)
-    cost = step_size + cost  # Update cost with step size
+    cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-def UP_30(x, y, theta, step_size, cost):
+def UP_30(x, y, theta, robot_step_size, cost):
     theta = theta + 30
-    x = x + (step_size * np.cos(np.radians(theta)))
-    y = y + (step_size * np.sin(np.radians(theta)))
+    x = x + (robot_step_size * np.cos(np.radians(theta)))
+    y = y + (robot_step_size * np.sin(np.radians(theta)))
     x = round(x)
     y = round(y)
-    cost = step_size + cost  # Update cost with step size
+    cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-def STRAIGHT_0(x, y, theta, step_size, cost):
+def STRAIGHT_0(x, y, theta, robot_step_size, cost):
     theta = theta + 0
-    x = x + (step_size * np.cos(np.radians(theta)))
-    y = y + (step_size * np.sin(np.radians(theta)))
+    x = x + (robot_step_size * np.cos(np.radians(theta)))
+    y = y + (robot_step_size * np.sin(np.radians(theta)))
     x = round(x)
     y = round(y)
-    cost = step_size + cost  # Update cost with step size
+    cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-def DOWN_30(x, y, theta, step_size, cost):
+def DOWN_30(x, y, theta, robot_step_size, cost):
     theta = theta - 30
-    x = x + (step_size * np.cos(np.radians(theta)))
-    y = y + (step_size * np.sin(np.radians(theta)))
+    x = x + (robot_step_size * np.cos(np.radians(theta)))
+    y = y + (robot_step_size * np.sin(np.radians(theta)))
     x = round(x)
     y = round(y)
-    cost = step_size + cost  # Update cost with step size
+    cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-def DOWN_60(x, y, theta, step_size, cost):
+def DOWN_60(x, y, theta, robot_step_size, cost):
     theta = theta - 60
-    x = x + (step_size * np.cos(np.radians(theta)))
-    y = y + (step_size * np.sin(np.radians(theta)))
+    x = x + (robot_step_size * np.cos(np.radians(theta)))
+    y = y + (robot_step_size * np.sin(np.radians(theta)))
     x = round(x)
     y = round(y)
-    cost = step_size + cost  # Update cost with step size
+    cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-def a_star(start, goal, obs_space, step_size):                       
+def a_star(start, goal, obs_space, robot_step_size):                       
     start_time = time.time()
     if Check_goal(start, goal):
         return None, 1
@@ -237,7 +237,7 @@ def a_star(start, goal, obs_space, step_size):
             print("Goal Node found")
             end_time = time.time()  # End time for measuring time taken
             time_taken = end_time - start_time
-            print(time_taken)            
+            print("runtime:",time_taken)            
             return all_nodes, time_taken, 1
 
         if current_id in explored_nodes:
@@ -248,7 +248,7 @@ def a_star(start, goal, obs_space, step_size):
         del unexplored_nodes[current_id]
 
         for move in moves:
-            x, y, theta, cost = move(present_node.x, present_node.y, present_node.theta, step_size, present_node.cost)
+            x, y, theta, cost = move(present_node.x, present_node.y, present_node.theta, robot_step_size, present_node.cost)
             c2g = dist((x, y), (goal.x, goal.y))  
    
             new_node = Node(x, y, theta, cost, present_node, c2g)   
@@ -375,8 +375,6 @@ if __name__ == '__main__':
     start_node = Node(s_x,map_height - s_y,start_theta, 0, -1)  # Start node with cost 0 and no parent
     goal_node = Node(e_x, map_height - e_y,end_theta, 0, -1)  # You can adjust the goal node coordinates as needed
     all_nodes, found_goal, time_taken = a_star(start_node, goal_node, obs_space, robot_step_size)
-    print("Runtime: ",time_taken)
-
     if found_goal:
         # Generate shortest path
         print("Goal node found!!")
