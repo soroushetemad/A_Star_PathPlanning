@@ -148,21 +148,22 @@ def Valid_Orient(theta):
         return True
     else:
         return False
+
 def Validity(x, y, obs_space):
-    # Check if coordinates are within the boundaries of the obstacle space and if the cell is occupied by an obstacle (value 1 or 2)  
-    if x < 0 or x >= map_width or y < 0 or y >= map_height or obs_space[y][x] == 1 or obs_space[y][x] == 2:   
+    # Check if coordinates are within the boundaries of the obstacle space and if the cell is occupied by an obstacle (value 1 or 2)
+    if x < 0 or x >= map_width or y < 0 or y >= map_height or obs_space[y][x] == 1 or obs_space[y][x] == 2:
         return False
     
     return obs_space[y, x] == 0
 
 # Heuristic function (Euclidean distance)
 def heuristic(current_node, goal_node):
-    dx = goal_node.x - current_node.x
-    dy = goal_node.y - current_node.y
-    return math.sqrt(dx ** 2 + dy ** 2)
+    return np.sqrt((current_node.x - goal_node.x)**2 + (current_node.y - goal_node.y)**2)
+
 
 def Check_goal(present, goal):
     return present.x == goal.x and present.y == goal.y
+
 # Actions and cost calculation
 def UP_60(x, y, theta, robot_step_size, cost):
     theta = theta + 60
@@ -216,7 +217,7 @@ def a_star(start, goal, obs_space, robot_step_size):
     goal_node = goal
     start_node = start
     
-    moves = [UP_60, UP_30, STRAIGHT_0, DOWN_30, DOWN_60]   
+    moves = [UP_60, UP_30, STRAIGHT_0, DOWN_30, DOWN_60]    
     unexplored_nodes = {}  # Dictionary to store all open nodes
     unexplored_nodes[(start_node.x, start_node.y)] = start_node
     
@@ -230,22 +231,22 @@ def a_star(start, goal, obs_space, robot_step_size):
         present_node = priority_queue.get()[1]  # Get the node with the lowest cost from the priority queue
         all_nodes.append([present_node.x, present_node.y, present_node.theta])
         
-        current_id = (present_node.x, present_node.y)
+        present_id = (present_node.x, present_node.y)
         if Check_goal(present_node, goal_node):
             goal_node.parent_id = present_node.parent_id
             goal_node.cost = present_node.cost
             print("Goal Node found")
             end_time = time.time()  # End time for measuring time taken
-            time_taken = end_time - start_time
-            print("runtime:",time_taken)            
+            time_taken = end_time - start_time 
+            print("Time taken to find the goal node:", time_taken , "seconds")           
             return all_nodes, time_taken, 1
 
-        if current_id in explored_nodes:
+        if present_id in explored_nodes:
             continue
         else:
-            explored_nodes[current_id] = present_node
+            explored_nodes[present_id] = present_node
 		
-        del unexplored_nodes[current_id]
+        del unexplored_nodes[present_id]
 
         for move in moves:
             x, y, theta, cost = move(present_node.x, present_node.y, present_node.theta, robot_step_size, present_node.cost)
@@ -276,6 +277,8 @@ def Backtrack(goal_node):
     x_path.append(goal_node.x)
     y_path.append(goal_node.y)
 
+    # Initialize total cost
+    total_cost = goal_node.cost  
     parent_node = goal_node.parent_id
     while parent_node != -1:
         x_path.append(parent_node.x)
@@ -285,12 +288,21 @@ def Backtrack(goal_node):
     x_path.reverse()
     y_path.reverse()
     
-    return x_path, y_path
+    return x_path, y_path, total_cost
+
+# Define video properties
+output_video_path = "Astar_path_planning_video.mp4"
+fps = 30
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+video_out = cv2.VideoWriter(output_video_path, fourcc, fps, (map_width, map_height))
+
+# Frame counter
+frame_counter = 0
+frame_interval = 50  # Write every 200th frame
 
 if __name__ == '__main__':
     # Visualize the map and path
     image = np.ones((map_height, map_width, 3), dtype=np.uint8) * 255
-  
     # Get clearance of the obstacle
     while True:
         clearance = input("Assign Clearance to the Obstacles: ")
@@ -300,8 +312,7 @@ if __name__ == '__main__':
             # OBSTACLE OUTLINE
             image[obs_space == 1] = (0, 0, 0)  
             # OBSTACLE FILL  
-            image[obs_space == 2] = (0, 169, 255)   
-
+            image[obs_space == 2] = (0, 169, 255) 
             break
         except ValueError:
             print("Invalid input format. Please enter an integer.")
@@ -312,7 +323,7 @@ if __name__ == '__main__':
         try:
             s_x, s_y = map(int, start_coordinates.split())
             if not Validity(s_x, s_y, obs_space):
-                print("Start node is out of bounds or within the obstacle. Please enter valid coordinates.")
+                print("Start node is either out of bounds or within the obstacle. Please enter valid coordinates.")
                 continue
             break
         except ValueError:
@@ -344,7 +355,10 @@ if __name__ == '__main__':
         robot_step_size = input("Enter Step size of the Robot: ")
         try:
             robot_step_size = int(robot_step_size)
-            break
+            if 1 <= robot_step_size <= 10:
+                break
+            else:
+                print("The robot step size must be between 1 and 10")
         except ValueError:
             print("Invalid input format. Please enter an integer.")
 
@@ -354,7 +368,7 @@ if __name__ == '__main__':
         try:
             e_x, e_y = map(int, goal_coordinates.split())
             if not Validity(e_x, e_y, obs_space):
-                print("Goal node is out of bounds or within the obstacle. Please enter valid coordinates.")
+                print("Goal node is either out of bounds or within the obstacle. Please enter valid coordinates.")
                 continue
             break
         except ValueError:
@@ -368,33 +382,59 @@ if __name__ == '__main__':
             if not Valid_Orient(end_theta):
                 print("Goal orientation has to be a multiple of 30")
                 continue
+            print("Processing......")
             break
         except ValueError:
             print("Invalid input format. Please enter an integer.")
 
-    start_node = Node(s_x,map_height - s_y,start_theta, 0, -1)  # Start node with cost 0 and no parent
-    goal_node = Node(e_x, map_height - e_y,end_theta, 0, -1)  # You can adjust the goal node coordinates as needed
+
+    start_node = Node(s_x,map_height- s_y,start_theta, 0, -1)  # Start node with cost 0 and no parent
+    goal_node = Node(e_x,map_height- e_y,end_theta, 0, -1)  # You can adjust the goal node coordinates as needed
     all_nodes, found_goal, time_taken = a_star(start_node, goal_node, obs_space, robot_step_size)
+
     if found_goal:
         # Generate shortest path
-        print("Goal node found!!")
-        x_path, y_path = Backtrack(goal_node)
-        print("Shortest Path: ", x_path, y_path)
+        x_path, y_path, total_cost = Backtrack(goal_node)
+        print("Total Cost: ", total_cost)
     else:
         print("Goal not found.")
 
-    # Draw start and end points
-    cv2.circle(image, (s_x, map_height - s_y), 5, (0, 255, 255), -1)  # Green circle for start point
-    cv2.circle(image, (e_x, map_height - e_y), 5, (0, 0, 255), -1)  # Red circle for end point
+    # Visualize the map and path
+    image_with_path = np.copy(image)
+    # Draw obstacles
+    image_with_path[obs_space == 1] = [0, 0, 0]  # Draw obstacles in black
+
+    if found_goal:
+        for idx, node in enumerate(all_nodes):
+            cv2.circle(image_with_path, (node[0], node[1]), 1, (0, 255, 0), -1)
+            frame_counter += 1
+
+            if frame_counter == frame_interval:
+                # Write the frame to video
+                video_out.write(image_with_path)
+                frame_counter = 0
+
+            # Display the frame
+            cv2.imshow("Map with Path", image_with_path)
+            cv2.waitKey(1)
+            
+        # Draw start and end points
+        cv2.circle(image_with_path, (s_x,map_height- s_y), 5, (0, 255, 255), -1)  # Green circle for start point
+        cv2.circle(image_with_path, (e_x,map_height- e_y), 5, (0, 0, 255), -1)  # Red circle for end point
+
     
-    # Draw explored nodes
-    for node in all_nodes:
-        cv2.circle(image, (node[0], node[1]), 1, (0, 255, 0), -1)  # Yellow circle for explored nodes
+        # Draw shortest path
+        for i in range(len(x_path) - 1):
+            cv2.line(image_with_path, (x_path[i], y_path[i]), (x_path[i + 1], y_path[i + 1]), (255, 0, 0), 2)
+            video_out.write(image_with_path)
 
-    # Draw shortest path
-    for i in range(len(x_path) - 1):
-        cv2.line(image, (x_path[i], y_path[i]), (x_path[i + 1], y_path[i + 1]), (255, 0, 0), 2)
 
-    cv2.imshow("Map with Path", image)
-    cv2.waitKey(0)
+            cv2.imshow("Map with Path", image_with_path)
+            cv2.waitKey(1)
+
+        video_out.write(image_with_path)
+        cv2.imshow("Map with path", image_with_path)
+        cv2.waitKey(1)
+    
+    video_out.release()
     cv2.destroyAllWindows()
