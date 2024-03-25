@@ -16,7 +16,7 @@ When running the script, you will be prompted to provide the following inputs:
 - **Radius of the Robot**: 5
 - **Start Node Coordinates**: 200 40
 - **Orientation of the Robot at Start Node**: 0 
-- **Step Size of the Robot**: 5
+- **Step Size of the Robot**: 10
 - **Goal Node Coordinates**: 1150 250
 - **Orientation of the Robot at Goal Node**: 30
   
