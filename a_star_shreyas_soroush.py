@@ -32,32 +32,32 @@ def Configuration_space():
 
             # Rectangle 1 Obastacle
             r11_buffer = (x + clearance + robot_radius) - 100
-            r12_buffer = (500 - y + clearance + robot_radius) - 100
+            r12_buffer = (500- y + clearance + robot_radius) - 100
             r13_buffer = (x - clearance - robot_radius) - 175
-            r14_buffer = (500 - y - clearance - robot_radius) - 500
+            r14_buffer = (500- y - clearance - robot_radius) - 500
 
             # Rectangle 2 Obastacle
             r21_buffer = (x + clearance + robot_radius) - 275
-            r22_buffer = (500 - y + clearance + robot_radius) - 0
+            r22_buffer = (500- y + clearance + robot_radius) - 0
             r23_buffer = (x - clearance - robot_radius) - 350
-            r24_buffer = (500 - y - clearance - robot_radius) - 400
+            r24_buffer = (500- y - clearance - robot_radius) - 400
 
             # Hexagon Obstacle
-            h6_buffer = (500 - y + clearance + robot_radius) +  0.58*(x + clearance + robot_radius) - 475
-            h5_buffer = (500 - y + clearance + robot_radius) - 0.58*(x - clearance - robot_radius) + 275
+            h6_buffer = ( y + clearance + robot_radius) +  0.58*(x + clearance + robot_radius) - 475
+            h5_buffer = ( y + clearance + robot_radius) - 0.58*(x - clearance - robot_radius) + 275
             h4_buffer = (x - clearance - robot_radius) - 781
-            h3_buffer = (500 - y - clearance - robot_radius) + 0.58*(x - clearance - robot_radius) - 775
-            h2_buffer = (500 - y - clearance - robot_radius) - 0.58*(x + clearance + robot_radius) - 24
+            h3_buffer = ( y - clearance - robot_radius) + 0.58*(x - clearance - robot_radius) - 775
+            h2_buffer = ( y - clearance - robot_radius) - 0.58*(x + clearance + robot_radius) - 24
             h1_buffer = (x + clearance + robot_radius) - 519
 
             # Block Obstacle
             t1_buffer = (x + clearance + robot_radius) - 900
             t2_buffer = (x + clearance + robot_radius) - 1020
             t3_buffer = (x - clearance - robot_radius) - 1100
-            t4_buffer = (500 - y + clearance + robot_radius) - 50
-            t5_buffer = (500 - y - clearance - robot_radius) - 125
-            t6_buffer = (500 - y + clearance + robot_radius) - 375
-            t7_buffer = (500 - y - clearance - robot_radius) - 450
+            t4_buffer = ( y + clearance + robot_radius) - 50
+            t5_buffer = ( y - clearance - robot_radius) - 125
+            t6_buffer = ( y + clearance + robot_radius) - 375
+            t7_buffer = ( y - clearance - robot_radius) - 450
 
             # Conditions for setting the border around the frame of the map
             w1 = (map_height - y) - (clearance + robot_radius)
@@ -96,32 +96,32 @@ def Configuration_space():
 
             # Rectangle 1 Obastacle
             r11 = (x) - 100
-            r12 = (500 - y) - 100
+            r12 = (500-y) - 100
             r13 = (x) - 175
-            r14 = (500 - y) - 500
+            r14 = (500-y) - 500
 
             # Rectangle 2 Obastacle
             r21 = (x) - 275
-            r22 = (500 - y) - 0
+            r22 = (500-y) - 0
             r24 = (x) - 350
-            r23 = (500 - y) - 400
+            r23 = (500-y) - 400
 
             # Hexagon Obstacle
-            h6 = (500 - y) +  0.58*(x) - 475.098
-            h5 = (500 - y) - 0.58*(x) + 275.002
+            h6 = ( y) +  0.58*(x) - 475.098
+            h5 = ( y) - 0.58*(x) + 275.002
             h4 = (x) - 779.9
-            h3 = (500 - y) + 0.58*(x) - 775.002
-            h2 = (500 - y) - 0.58*(x) - 24.92
+            h3 = ( y) + 0.58*(x) - 775.002
+            h2 = ( y) - 0.58*(x) - 24.92
             h1 = (x) - 520.1
 
             # Block Obstacle
             t1 = (x) - 900
             t2 = (x) - 1020
             t3 = (x) - 1100
-            t4 = (500 - y) - 50
-            t5 = (500 - y) - 125
-            t6 = (500 - y) - 375
-            t7 = (500 - y) - 450
+            t4 = ( y) - 50
+            t5 = ( y) - 125
+            t6 = ( y) - 375
+            t7 = ( y) - 450
 
             # Setting the line constraint to obtain the obstacle space with buffer
             if ((h6 > 0 and h5 > 0 and h4 < 0 and h3 < 0 and h2 < 0 and h1 > 0) or
@@ -132,15 +132,15 @@ def Configuration_space():
                 (t6 > 0 and t7 < 0 and t1 > 0 and t2 < 0)):
                 obs_space[y, x] = 2
 
-    for i in range(1200):
-        for j in range(clearance):
+    for i in range(map_width):
+        for j in range(clearance+ robot_radius):
             obs_space[j][i] = 1
-            obs_space[499-j][i] = 1
+            obs_space[map_height-1-j][i] = 1
 
-    for i in range(500):
-        for j in range(clearance):
+    for i in range(map_height):
+        for j in range(clearance+ robot_radius):
             obs_space[i][j] = 1
-            obs_space[i][1199-j] = 1
+            obs_space[i][map_width-1-j] = 1
 
     return obs_space
 
@@ -212,12 +212,12 @@ def DOWN_60(x, y, theta, robot_step_size, cost):
     cost = robot_step_size + cost  # Update cost with step size
     return x, y, theta, cost
 
-# a star search algorithm implementation for path planning.
+# A* search algorithm implementation for path planning.
 def a_star(start, goal, obs_space, robot_step_size):
     # stating the timer to calculate time taken to run the algorithm.
     start_time = time.time()
     if Check_goal(start, goal):
-        return None, 1
+        return None, 1, 0  # Return None for all_nodes, success flag 1, and time taken 0
     goal_node = goal
     start_node = start
 
@@ -233,6 +233,7 @@ def a_star(start, goal, obs_space, robot_step_size):
     priority_queue.put((start_node.cost, start_node))  # Put the start node into the priority queue
 
     all_nodes = []  # List to store all nodes that have been traversed, for visualization
+    visited = set()  # Set to keep track of visited coordinates
 
     while not priority_queue.empty():
         present_node = priority_queue.get()[1]  # Get the node with the lowest cost from the priority queue
@@ -246,7 +247,7 @@ def a_star(start, goal, obs_space, robot_step_size):
             end_time = time.time()  # End time for measuring time taken
             time_taken = end_time - start_time
             print("Time taken to find the goal node:", time_taken , "seconds")
-            return all_nodes, time_taken, 1
+            return all_nodes, 1, time_taken  # <-- Return all_nodes, success flag, and time taken
 
         if current_id in explored_nodes:
             continue
@@ -268,6 +269,12 @@ def a_star(start, goal, obs_space, robot_step_size):
             elif new_node_id in explored_nodes:
                 continue
 
+            if new_node_id in visited:
+                # Skip adding the node if its coordinates have already been visited
+                continue
+
+            visited.add(new_node_id)  # Add the new coordinates to the visited set
+            
             if new_node_id in unexplored_nodes:
                 if new_node.cost < unexplored_nodes[new_node_id].cost:
                     unexplored_nodes[new_node_id].cost = new_node.cost
@@ -277,7 +284,7 @@ def a_star(start, goal, obs_space, robot_step_size):
 
             priority_queue.put((new_node.cost + new_node.c2g, new_node))  # Put the new node into the priority queue
 
-    return all_nodes, 0 # If goal not found, return all nodes traversed and failure flag
+    return all_nodes, 0, 0  # If goal not found, return all nodes traversed, failure flag, and time taken 0
 
 # Backtrack to find the path from goal to start node
 def Backtrack(goal_node):  
