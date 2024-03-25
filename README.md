@@ -1,5 +1,13 @@
 # A* Path Planning
 
+Name: Soroush Etemad
+Directory ID: setemad
+UID: 116608992
+
+Name: Shreyas Acharya
+Directory ID: shrey1s0
+UID: 120426643
+
 ## Overview
 This A* Path Planning algorithm is implemented in Python using OpenCV and NumPy libraries. It allows finding the shortest path between a start and a goal node in a given map with obstacles. The algorithm considers a robot with a specified clearance and radius, navigating through a defined configuration space.
 
