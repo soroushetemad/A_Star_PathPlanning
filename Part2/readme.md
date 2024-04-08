@@ -58,3 +58,9 @@ This project focuses on implementing the A* algorithm for path planning on a Tur
 Example input: 
    - Start node: x,y, theta = 500, 1000, 0 
    - End node: x,y = 5670, 560
+
+
+Video files 
+Part1: https://drive.google.com/file/d/1z3QmxDkgisppt0leY7HHq4HZqw9U5qu4/view?usp=drive_link
+
+Part2: https://drive.google.com/file/d/1SPBTEdvCJkiLnhEost14SN5G3KxnclpN/view?usp=drive_link
