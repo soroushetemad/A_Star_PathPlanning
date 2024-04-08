@@ -1,0 +1,10 @@
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/uninstall.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/turtlebot3_project3_uninstall.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/turtlebot3_drive.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/test.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/edit_cache.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/rebuild_cache.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/list_install_components.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/install.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/install/local.dir
+/home/setemad/project3_ws/build/turtlebot3_project3/CMakeFiles/install/strip.dir

@@ -1,0 +1,6 @@
+Invoking command in '/home/setemad/project3_ws/build/turtlebot3_project3': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/setemad/project3_ws/src/turtlebot3_project3 -DCMAKE_INSTALL_PREFIX=/home/setemad/project3_ws/install/turtlebot3_project3
+Invoked command in '/home/setemad/project3_ws/build/turtlebot3_project3' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/setemad/project3_ws/src/turtlebot3_project3 -DCMAKE_INSTALL_PREFIX=/home/setemad/project3_ws/install/turtlebot3_project3
+Invoking command in '/home/setemad/project3_ws/build/turtlebot3_project3': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/setemad/project3_ws/build/turtlebot3_project3 -- -j16 -l16
+Invoked command in '/home/setemad/project3_ws/build/turtlebot3_project3' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/setemad/project3_ws/build/turtlebot3_project3 -- -j16 -l16
+Invoking command in '/home/setemad/project3_ws/build/turtlebot3_project3': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/setemad/project3_ws/build/turtlebot3_project3
+Invoked command in '/home/setemad/project3_ws/build/turtlebot3_project3' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/setemad/project3_ws/build/turtlebot3_project3
