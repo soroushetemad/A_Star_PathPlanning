@@ -1,3 +1,7 @@
+################################# GITHUB LINK #####################################
+############### https://github.com/soroushetemad/A_Star_PathPlanning.git ##########
+###################################################################################
+
 import numpy as np
 import math
 import cv2
@@ -7,16 +11,12 @@ from math import dist
 
 # defining the search space(map) and other global variables
 ROBOT_RADIUS = 220 
-# rpm1 = 10
-# rpm2 = 15
 map_width = 6000
 map_height = 2000
 threshold = 100
 POINT_SIZE = 5
 BUMPER_COLOR = (20, 20, 20)
 OBSTACLE_COLOR = (10, 100, 255)
-# clearance = 10
-
 
 # Defining a class for nodes in the graph
 class Node:
@@ -266,3 +266,4 @@ def Backtrack(goal_node):
     # print(x,y,theta,RPM_Left, RPM_Right)
     
     return x,y,theta,RPM_Left,RPM_Right
+
