@@ -1,5 +1,13 @@
 # A* Path Planning for TurtleBot3 Waffle
 
+Name: Soroush Etemad
+Directory ID: setemad
+UID: 116608992
+
+Name: Shreyas Acharya
+Directory ID: shrey1s0
+UID: 120426643
+
 ## Overview
 This project focuses on implementing the A* (A-star) algorithm for path planning on a TurtleBot3 Waffle robot navigating through a predefined obstacle space. The A* algorithm is a widely used method for finding the shortest path between nodes in a graph, making it suitable for navigation tasks.
 
