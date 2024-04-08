@@ -16,7 +16,7 @@ This project focuses on implementing the A* (A-star) algorithm for path planning
 3. Install Gazebo and RViz if you intend to use simulation and visualization tools.
 4. Ensure Python is installed on your system.
 
-## Usage
-1. Clone this repository into your ROS workspace.
-   ```bash
-   git clone https://github.com/your_username/your_repository.git
+
+## Running Program
+1. In one terminal run: ros2 launch turtlebot3_project3 competition_world.launch.py
+2. In another terminal run: ros2 run turtlebot3_project3 a_star_publisher.py
